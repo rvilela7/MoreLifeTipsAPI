@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 
 namespace MoreLifeTips.Controllers;
 
@@ -27,11 +28,19 @@ public class LifeTipsController : ControllerBase
     [HttpGet("/all")]
     public async task<IActionResult> GetAllQuotes()
     {
-        return Ok();
+        return Ok(fileRead());
     }
 
     private string fileRead()
     {
-        return "";
+        string myFile = string.Empty;
+
+        foreach (string line in File.ReadLines(@"lifetips.txt"))
+        {
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
+            myFile += line.Trim().Substring(2);
+        }
+        return myFile;
     }
 }
