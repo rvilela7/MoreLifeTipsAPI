@@ -39,8 +39,14 @@ public class LifeTipsController : ControllerBase
     public IActionResult GetAllQuotes()
     {
         string allQuotes = string.Empty;
-        fileLines.ForEach(m => allQuotes += m);
+        fileLines.ForEach(m => allQuotes += $"{m}\n");
         return Ok(allQuotes);
+    }
+
+    [HttpGet("/author")]
+    public ContentResult GetAuthor()
+    {
+        return base.Content("From <a href=\"https://kk.org/thetechnium/103-bits-of-advice-i-wish-i-had-known\">TheTechnium</a>", "text/html");
     }
 
     private List<string> fileRead()
