@@ -45,13 +45,21 @@ public class LifeTipsController : ControllerBase
 
     private List<string> fileRead()
     {
-        List<string> linesList = new List<string>();
-        foreach (string line in System.IO.File.ReadLines(@"lifetips.txt"))
+        try
         {
-            if (string.IsNullOrWhiteSpace(line))
-                continue;
-            linesList.Add(line.Trim().Substring(2));
+            List<string> linesList = new List<string>();
+            foreach (string line in System.IO.File.ReadLines(@"lifetips.txt"))
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+                linesList.Add(line.Trim().Substring(2));
+            }
+            return linesList;
         }
-        return linesList;
+        catch (System.IO.FileNotFoundException)
+        {
+            _logger.LogError("File not found");
+            return new List<string>();
+        }
     }
 }
