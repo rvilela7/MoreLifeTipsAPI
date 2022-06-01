@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
 
 namespace MoreLifeTips.Controllers;
 
@@ -8,39 +7,51 @@ namespace MoreLifeTips.Controllers;
 public class LifeTipsController : ControllerBase
 {
     private readonly ILogger<LifeTipsController> _logger;
+    private readonly List<string> fileLines;
     public LifeTipsController(ILogger<LifeTipsController> logger)
     {
         _logger = logger;
+        fileLines = fileRead();
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetRandomQuote()
+    [HttpGet("/quote")]
+    public IActionResult GetRandomQuote()
     {
-        return Ok();
+        Random rnd = new Random();
+        int i = rnd.Next(fileLines.Count());
+        return Ok(fileLines[i]);
     }
 
-    [HttpGet("{line}")]
-    public async Task<IActionResult> GetRandomQuote(int line)
+    [HttpGet("/quote/{line}")]
+    public IActionResult GetQuote(int line)
     {
-        return Ok();
+        try
+        {
+            return Ok(fileLines[line]);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return BadRequest("Line number out of range");
+        }
     }
 
     [HttpGet("/all")]
-    public async task<IActionResult> GetAllQuotes()
+    public IActionResult GetAllQuotes()
     {
-        return Ok(fileRead());
+        string allQuotes = string.Empty;
+        fileLines.ForEach(m => allQuotes += m);
+        return Ok(allQuotes);
     }
 
-    private string fileRead()
+    private List<string> fileRead()
     {
-        string myFile = string.Empty;
-
-        foreach (string line in File.ReadLines(@"lifetips.txt"))
+        List<string> linesList = new List<string>();
+        foreach (string line in System.IO.File.ReadLines(@"lifetips.txt"))
         {
             if (string.IsNullOrWhiteSpace(line))
                 continue;
-            myFile += line.Trim().Substring(2);
+            linesList.Add(line.Trim().Substring(2));
         }
-        return myFile;
+        return linesList;
     }
 }

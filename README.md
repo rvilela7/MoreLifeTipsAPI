@@ -1,3 +1,3 @@
 # MoreLifeTipsAPI
 
-Just a simple quote api
+Just a simple quote api with tips that nobody asks for
