@@ -19,7 +19,7 @@ public class LifeTipsController : ControllerBase
     {
         Random rnd = new Random();
         int i = rnd.Next(fileLines.Count());
-        return Ok(fileLines[i]);
+        return Ok($"({i}) {fileLines[i]}");
     }
 
     [HttpGet("/quote/{line}")]
@@ -39,7 +39,8 @@ public class LifeTipsController : ControllerBase
     public IActionResult GetAllQuotes()
     {
         string allQuotes = string.Empty;
-        fileLines.ForEach(m => allQuotes += $"{m}\n");
+        int i = 0;
+        fileLines.ForEach(m => allQuotes += $"({++i}) {m}\n");
         return Ok(allQuotes);
     }
 
