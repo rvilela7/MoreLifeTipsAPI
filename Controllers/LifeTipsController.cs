@@ -8,6 +8,8 @@ public class LifeTipsController : ControllerBase
 {
     private readonly ILogger<LifeTipsController> _logger;
     private readonly List<string> fileLines;
+    private const int newQuoteLine = 103;
+
     public LifeTipsController(ILogger<LifeTipsController> logger)
     {
         _logger = logger;
@@ -19,6 +21,18 @@ public class LifeTipsController : ControllerBase
     {
         Random rnd = new Random();
         int i = rnd.Next(fileLines.Count());
+        return Ok($"({i}) {fileLines[i]}");
+    }
+    
+    /// <summary>
+    /// Returns the latest addictions
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("/latestQuote")]
+    public IActionResult GetLatestRandomQuote()
+    {
+        Random rnd = new Random();
+        int i = rnd.Next(newQuoteLine, fileLines.Count());
         return Ok($"({i}) {fileLines[i]}");
     }
 
